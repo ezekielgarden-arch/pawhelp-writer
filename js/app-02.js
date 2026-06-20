@@ -53,7 +53,10 @@ const state = {
   lastData: null,
   lastCopy: null,
   installPrompt: null,
-  history: readHistory()
+  history: (() => {
+    try { return JSON.parse(localStorage.getItem('pawhelp-history') || '[]'); }
+    catch { return []; }
+  })()
 };
 
 function t(key) { return copybook[state.lang][key] || key; }
@@ -106,5 +109,4 @@ function applyData(data) {
   });
   $('#detailCount').textContent = $('#details').value.length;
 }
-
 
