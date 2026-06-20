@@ -1,9 +1,15 @@
-const CACHE = "pawhelp-writer-v2";
+const CACHE = "pawhelp-writer-v3";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
-  "./app.js",
+  "./js/app-01.js",
+  "./js/app-02.js",
+  "./js/app-03.js",
+  "./js/app-04.js",
+  "./js/app-05.js",
+  "./js/app-06.js",
+  "./js/app-07.js",
   "./manifest.webmanifest",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
