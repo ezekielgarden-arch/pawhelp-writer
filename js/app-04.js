@@ -103,6 +103,19 @@ function closeWechatSave() {
   document.body.classList.remove('wechat-save-open');
 }
 
+function showWechatShare() {
+  $('#wechatShareImage').src = $('#cardCanvas').toDataURL('image/png');
+  $('#wechatShareOverlay').hidden = false;
+  document.body.classList.add('wechat-share-open');
+  showToast(t('wechatShareOpened'));
+}
+
+function closeWechatShare() {
+  $('#wechatShareOverlay').hidden = true;
+  $('#wechatShareImage').removeAttribute('src');
+  document.body.classList.remove('wechat-share-open');
+}
+
 function configureEnvironment() {
   const inWechat = /MicroMessenger/i.test(navigator.userAgent);
   $('#wechatNotice').hidden = !inWechat;
@@ -156,11 +169,6 @@ async function downloadCard(showMessage = true) {
   if (isWechatAndroid()) { showWechatSave(); return null; }
   const blob = await canvasBlob($('#cardCanvas')); const android = /Android/i.test(navigator.userAgent);
   if (android) {
-    const file = new File([blob], fileName(), { type: 'image/png' });
-    if (navigator.canShare?.({ files: [file] })) {
-      try { await navigator.share({ files: [file], title: state.lastCopy.title }); if (showMessage) showToast(t('saved')); return blob; }
-      catch (error) { if (error.name === 'AbortError') return blob; }
-    }
     openSavePreview(blob); if (showMessage) showToast(t('androidSaveHint')); return blob;
   }
   const onPhone = /iPhone|iPad|iPod/i.test(navigator.userAgent) || navigator.maxTouchPoints > 1;
@@ -169,20 +177,25 @@ async function downloadCard(showMessage = true) {
 }
 
 async function shareCard() {
-  if (isWechatAndroid()) { showWechatSave(); return; }
+  if (isWechatAndroid()) { showWechatShare(); return; }
   const blob = await canvasBlob($('#cardCanvas')); const file = new File([blob], fileName(), { type: 'image/png' });
   if (navigator.canShare?.({ files: [file] })) {
     try { await navigator.share({ files: [file], title: state.lastCopy.title, text: state.lastCopy.paw }); showToast(t('cardShared')); return; }
     catch (error) { if (error.name === 'AbortError') return; }
   }
-  openSavePreview(blob); showToast(t('shareUnavailable'));
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: state.lastCopy.title, text: state.lastCopy.body, url: location.href });
+      showToast(t('shareLinkOpened')); return;
+    } catch (error) { if (error.name === 'AbortError') return; }
+  }
+  await copyPost(); showToast(t('shareUnavailable'));
 }
 
 function bindEvents() {
-  $('.lang-switch').addEventListener('click', (event) => {
-    const button = event.target.closest('button[data-lang]'); if (!button) return;
+  $$('.lang-switch button[data-lang]').forEach((button) => button.addEventListener('click', () => {
     state.lang = button.dataset.lang; localStorage.setItem('pawhelp-lang', state.lang); renderLanguage();
-  });
+  }));
   $('#rescueForm').addEventListener('submit', (event) => { event.preventDefault(); generate(); });
   $('#fillExample').addEventListener('click', fillExample);
   $('#details').addEventListener('input', () => { $('#detailCount').textContent = $('#details').value.length; });
@@ -203,6 +216,9 @@ function bindEvents() {
   $('#saveSystemShare').addEventListener('click', systemSaveOrShare);
   $('#openOriginal').addEventListener('click', openOriginalImage);
   $('#closeWechatSave').addEventListener('click', closeWechatSave);
+  $('#closeWechatShare').addEventListener('click', closeWechatShare);
+  $('#wechatShareCopy').addEventListener('click', copyPost);
+  $('#wechatShareSave').addEventListener('click', () => { closeWechatShare(); showWechatSave(); });
   $('#saveDialog').addEventListener('cancel', (event) => { event.preventDefault(); closeSavePreview(); });
   $('#ratioSwitch').addEventListener('click', (event) => {
     const button = event.target.closest('button[data-ratio]'); if (!button) return; state.ratio = button.dataset.ratio;
@@ -225,7 +241,7 @@ function init() {
   const starter = { animal: 'cat', age: 'adult', condition: 'injured', helpType: 'foster', location: '', contact: '', tone: 'gentle', platform: 'xiaohongshu', length: 'medium', details: '' };
   applyData(starter); state.lastData = starter; state.lastCopy = buildCopy(starter);
   bindEvents(); preloadTemplateImages(); renderLanguage(); renderPost(); drawMainCard(); renderHistory(); configureEnvironment();
-  if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./sw.js?v=9').catch(() => {});
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./sw.js?v=10').catch(() => {});
 }
 
 document.addEventListener('DOMContentLoaded', init);

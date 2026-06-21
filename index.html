@@ -6,18 +6,20 @@
   <meta name="description" content="小爪帮帮 PawHelp：双语流浪猫狗求助文案与图片卡片生成器。">
   <meta name="theme-color" content="#E9825A">
   <meta name="color-scheme" content="light">
-  <link rel="manifest" href="manifest.webmanifest?v=9">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=9">
+  <link rel="manifest" href="manifest.webmanifest?v=10">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=10">
+  <link rel="apple-touch-icon-precomposed" href="icons/apple-touch-icon.png?v=10">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="application-name" content="小爪帮帮&#10;PawHelp">
   <meta name="apple-mobile-web-app-title" content="小爪帮帮&#10;PawHelp">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png?v=9">
-  <link rel="icon" type="image/png" sizes="96x96" href="icons/icon-96.png?v=9">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png?v=9">
-  <link rel="shortcut icon" type="image/png" href="icons/favicon-32.png?v=9">
-  <link rel="stylesheet" href="styles.css?v=9">
+  <link rel="icon" href="favicon.ico?v=10" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png?v=10">
+  <link rel="icon" type="image/png" sizes="96x96" href="icons/icon-96.png?v=10">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png?v=10">
+  <link rel="shortcut icon" href="favicon.ico?v=10">
+  <link rel="stylesheet" href="styles.css?v=10">
   <title>小爪帮帮 PawHelp</title>
 </head>
 <body>
@@ -25,7 +27,7 @@
   <div class="app-shell">
     <header class="hero">
       <div class="brand-lockup">
-        <img class="brand-icon" src="icons/icon-192.png?v=9" alt="" width="74" height="74">
+        <img class="brand-icon" src="icons/icon-192.png?v=10" alt="" width="74" height="74">
         <div>
           <p class="eyebrow" data-i18n="eyebrow">给流浪的小爪一点声音</p>
           <h1><span data-i18n="brandZh">小爪帮帮</span> <em data-i18n="brandEn">PawHelp</em></h1>
@@ -218,7 +220,7 @@
       <p class="wechat-notice" id="wechatNotice" hidden data-i18n="wechatNotice">当前在微信内打开：生成和保存可直接使用；添加桌面请点右上角菜单</p>
 
       <section class="install-card">
-        <img src="icons/icon-192.png?v=9" alt="" width="58" height="58">
+        <img src="icons/icon-192.png?v=10" alt="" width="58" height="58">
         <div><strong data-i18n="installTitle">把小爪帮帮带在手机里</strong><p data-i18n="installText">添加到手机桌面，遇到流浪猫狗时可以快速打开</p></div>
         <button type="button" id="installButton" data-i18n="installHow">如何添加到桌面</button>
       </section>
@@ -248,10 +250,22 @@
     <p class="wechat-save-fallback" data-i18n="wechatSaveFallback">如果微信仍不显示保存菜单，请直接截屏；图片不会上传服务器</p>
   </section>
 
+  <section class="wechat-share-overlay" id="wechatShareOverlay" hidden aria-modal="true" role="dialog">
+    <div class="wechat-share-card">
+      <div class="wechat-share-arrow" aria-hidden="true">↗</div>
+      <h2 data-i18n="wechatShareTitle">图片已准备好分享</h2>
+      <p data-i18n="wechatShareHint">微信不允许网页直接打开图片分享面板，请点右上角菜单分享本页面，或先保存图片再从相册发送</p>
+      <img id="wechatShareImage" alt="Generated rescue card ready to share">
+      <button class="primary-button" id="wechatShareSave" type="button" data-i18n="wechatShareSave">先保存图片</button>
+      <button class="secondary-button" id="wechatShareCopy" type="button" data-i18n="wechatShareCopy">复制配套文案</button>
+      <button class="secondary-button" id="closeWechatShare" type="button" data-i18n="close">关闭</button>
+    </div>
+  </section>
+
   <dialog id="installDialog">
     <form method="dialog" class="dialog-card">
       <button class="dialog-close" value="close" aria-label="Close">×</button>
-      <img src="icons/icon-192.png?v=9" alt="" width="82" height="82">
+      <img src="icons/icon-192.png?v=10" alt="" width="82" height="82">
       <h2 data-i18n="installDialogTitle">添加 PawHelp 到主屏幕</h2>
       <div class="install-steps" id="installSteps"></div>
       <button class="primary-button" value="close" data-i18n="gotIt">知道了</button>
@@ -293,15 +307,15 @@
     </div>
   </dialog>
 
-  <script src="js/app-01.js?v=9" defer></script>
-  <script src="js/app-02.js?v=9" defer></script>
-  <script src="js/app-03.js?v=9" defer></script>
-  <script src="js/app-04.js?v=9" defer></script>
-  <script src="js/app-05.js?v=9" defer></script>
-  <script src="js/app-06.js?v=9" defer></script>
-  <script src="js/app-08.js?v=9" defer></script>
-  <script src="js/app-09.js?v=9" defer></script>
-  <script src="js/app-10.js?v=9" defer></script>
-  <script src="js/app-07.js?v=9" defer></script>
+  <script src="js/app-01.js?v=10" defer></script>
+  <script src="js/app-02.js?v=10" defer></script>
+  <script src="js/app-03.js?v=10" defer></script>
+  <script src="js/app-04.js?v=10" defer></script>
+  <script src="js/app-05.js?v=10" defer></script>
+  <script src="js/app-06.js?v=10" defer></script>
+  <script src="js/app-08.js?v=10" defer></script>
+  <script src="js/app-09.js?v=10" defer></script>
+  <script src="js/app-10.js?v=10" defer></script>
+  <script src="js/app-07.js?v=10" defer></script>
 </body>
 </html>

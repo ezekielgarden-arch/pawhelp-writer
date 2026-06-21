@@ -10,27 +10,27 @@ function buildCopy(data) {
     : /^请/.test(rawContact)
       ? rawContact
       : `请联系 ${rawContact}`;
-  const contactInstructionEn = !rawContact
-    ? 'Please send a private message'
-    : /^please\b/i.test(rawContact)
-      ? rawContact
+  const contactActionEn = !rawContact
+    ? 'send a private message'
+    : /^(please\s+)/i.test(rawContact)
+      ? rawContact.replace(/^(please\s+)/i, '')
       : /^(contact|dm|message|call|email)\b/i.test(rawContact)
-        ? `Please ${rawContact}`
-        : `Please contact ${rawContact}`;
+        ? rawContact
+        : `contact ${rawContact}`;
 
   const conditionZh = {
     injured: '它看起来可能受了伤，需要尽快确认情况', weak: '它看起来有些虚弱、消瘦', pregnant: '它看起来可能怀孕了',
     young: '它年纪很小，目前独自在外', stable: '目前看起来状态尚可，但还在外面徘徊', unknown: '目前还无法确定它的具体状况'
   }[data.condition];
   const conditionEn = {
-    injured: 'It may be injured and needs its condition checked soon', weak: 'It looks weak and underweight', pregnant: 'It may be pregnant',
-    young: 'It is very young and currently alone outside', stable: 'It appears stable for now but is still staying outside', unknown: 'Its condition is not clear yet'
+    injured: 'It may be injured and should be assessed as soon as possible', weak: 'It looks weak and underweight', pregnant: 'It may be pregnant',
+    young: 'It is very young and currently alone outside', stable: 'It appears stable for now but is still outdoors', unknown: 'Its condition is not clear yet'
   }[data.condition];
   const helpZh = { foster: '临时安置或救助资源', vet: '靠谱的医疗资源', transport: '安全转运', adoption: '合适的领养线索', food: '食物和干净饮水', share: '帮忙扩散这条信息' }[data.helpType];
-  const helpEn = { foster: 'a safe foster or rescue contact', vet: 'reliable veterinary help', transport: 'safe transport', adoption: 'a suitable adoption lead', food: 'food and clean water', share: 'help sharing this post' }[data.helpType];
+  const helpEn = { foster: 'a safe foster home or rescue contact', vet: 'reliable veterinary help', transport: 'safe transport', adoption: 'a suitable adoption lead', food: 'food and clean water', share: 'more people to share this post' }[data.helpType];
   const urgent = ['injured', 'weak', 'young'].includes(data.condition) || data.tone === 'urgent';
   const pawZh = { foster: '今晚如果有个安全的地方，就已经很重要。', vet: '早一点确认伤情，也许就能少受一点苦。', transport: '差的可能只是一段安全的路。', adoption: '它在等一个愿意认真了解它的人。', food: '一碗水和一点食物，也能撑过眼前。', share: '多一个人看见，就多一条可能的线索。' }[data.helpType];
-  const pawEn = { foster: 'One safe place tonight would already mean a lot.', vet: 'An earlier check may spare this little one more pain.', transport: 'The missing piece may simply be one safe ride.', adoption: 'This little one is waiting for someone willing to know them.', food: 'A little food and clean water can help with the next step.', share: 'One more person seeing this may bring the right lead.' }[data.helpType];
+  const pawEn = { foster: 'One safe place tonight would already mean a lot.', vet: 'An earlier check may spare this little one more pain.', transport: 'The missing piece may simply be one safe ride.', adoption: 'This little one is waiting for someone willing to give them a real chance.', food: 'A little food and clean water can help with the next step.', share: 'One more person seeing this may bring the right lead.' }[data.helpType];
 
   if (lang === 'zh') {
     const title = urgent ? `${location}这只${animal}需要尽快帮助` : `在${location}遇见一只需要帮助的${animal}`;
@@ -46,8 +46,8 @@ function buildCopy(data) {
   const observed = data.details ? `Observed: ${data.details.replace(/[.!]+$/, '')}. ` : '';
   const article = /^[aeiou]/i.test(age) ? 'an' : 'a';
   const agePhrase = data.age === 'unknown' ? `a ${animal}` : `${article} ${age.toLowerCase()} ${animal}`;
-  const shortBody = `A ${animal} was found near ${location}. ${conditionEn}. We are looking for ${helpEn}. ${contactInstructionEn}.`;
-  const mediumBody = `We found ${agePhrase} near ${location}. ${conditionEn}. ${observed}The most urgent need is ${helpEn}. If you have a useful contact or can help, ${contactInstructionEn}. Sharing is appreciated.`;
+  const shortBody = `A ${animal} was found near ${location}. ${conditionEn}. We are looking for ${helpEn}. Please ${contactActionEn}.`;
+  const mediumBody = `We found ${agePhrase} near ${location}. ${conditionEn}. ${observed}The most urgent need is ${helpEn}. If you have a useful contact or can help, please ${contactActionEn}. Sharing this post would also help.`;
   const fullBody = `${mediumBody}${data.condition === 'injured' ? ' This is only an observation; a veterinary or rescue professional should assess the animal.' : ''}`;
   const platformTail = data.platform === 'instagram' ? '\n\n#StrayAnimalHelp #AnimalRescue' : '';
   return { title, body: (data.length === 'short' ? shortBody : data.length === 'full' ? fullBody : mediumBody) + platformTail, cardBody: data.length === 'short' ? shortBody : mediumBody, paw: pawEn, location, contact, animal, age, help: helpEn, condition: conditionEn };

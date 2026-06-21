@@ -97,7 +97,7 @@ function preloadTemplateImages() {
     if (templateImages.has(template.id)) return;
     const image = new Image(); image.decoding = 'async';
     image.onload = () => { templateImages.set(template.id, image); drawMainCard(); renderTemplates(); };
-    image.src = `${template.photo}?v=9`;
+    image.src = `${template.photo}?v=10`;
   });
 }
 
