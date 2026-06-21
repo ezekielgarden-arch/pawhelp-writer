@@ -1,10 +1,11 @@
 interface:
   display_name: "小爪帮帮 PawHelp"
   short_description: "快速生成双语流浪猫狗求助文案与可分享图片卡片"
-  icon_small: "./assets/brand-icon-400.png"
-  icon_large: "./assets/brand-icon.png"
+  icon_small: "./icons/icon-192.png"
+  icon_large: "./icons/icon-512.png"
   brand_color: "#E9825A"
   default_prompt: "使用 $pawhelp-writer 为遇到的流浪猫狗生成温暖、清楚、可直接转发的求助文案和图片卡片。"
 
 policy:
   allow_implicit_invocation: true
+

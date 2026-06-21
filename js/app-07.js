@@ -59,8 +59,13 @@ function drawCard(canvas, data, copy, templateId, thumbnail = false) {
   if (!canvas || !data || !copy) return;
   const ctx = canvas.getContext('2d'); const w=canvas.width,h=canvas.height,u=Math.min(w,h)/1080;
   ctx.clearRect(0,0,w,h);ctx.save();ctx.textBaseline='top';ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
-  const drawers={warm:drawWarm,journal:drawJournal,notice:drawNotice,cute:drawCute,green:drawGreen,xhs:drawXhs,polaroid:drawPolaroid,alert:drawAlert,community:drawCommunity,quote:drawQuote};
-  drawers[templateId](ctx,w,h,data,copy,u,thumbnail);ctx.restore();
+  const drawers={
+    warm:drawWarm,notice:drawNotice,green:drawGreen,alert:drawAlert,quote:drawQuote,
+    'voice-photo':drawVoicePhoto,'paper-pets':drawPaperPets,'urgent-photo':drawUrgentPhoto,
+    'starlight-photo':drawStarlightPhoto,'polaroid-photo':drawPolaroidPhoto,'editorial-photo':drawEditorialPhoto,
+    'floral-kindness':drawFloralKindness,'warm-appeal':drawWarmAppeal,'scrapbook-help':drawScrapbookHelp
+  };
+  (drawers[templateId] || drawWarm)(ctx,w,h,data,copy,u,thumbnail);ctx.restore();
 }
 
 function drawMainCard() {
@@ -69,5 +74,4 @@ function drawMainCard() {
   if(canvas.width!==width||canvas.height!==height){canvas.width=width;canvas.height=height;}
   drawCard(canvas,state.lastData,state.lastCopy,state.template,false);
 }
-
 

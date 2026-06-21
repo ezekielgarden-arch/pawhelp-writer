@@ -290,6 +290,24 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
 .secondary-button { color: var(--primary-deep); background: #fff5eb; border: 1px solid #f1d2bb; }
 .quality-note { margin: 9px 0 0; color: var(--muted); text-align: center; font-size: .76rem; }
 .template-title-row { display: flex; align-items: center; justify-content: space-between; }
+.photo-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding: 15px 16px;
+  border: 1px solid #efd8c5;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fff8ef, #fffdf8);
+}
+.photo-tools[hidden] { display: none; }
+.photo-tools-copy { display: grid; gap: 3px; min-width: 0; }
+.photo-tools-copy small { color: var(--muted); line-height: 1.4; }
+.photo-tools-copy span { color: #758b60; font-size: .75rem; font-weight: 800; }
+.photo-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+.photo-actions button { padding: 9px 12px; border: 1px solid #efcdb5; border-radius: 999px; color: var(--primary-deep); background: #fff; font-weight: 750; }
+.photo-actions button.active { color: #fff; border-color: #7b9f59; background: #7b9f59; }
 .template-title-row h3 { margin: 2px 0 12px; }
 .template-title-row span { color: var(--muted); font-size: .8rem; }
 .template-scroller {
@@ -335,9 +353,12 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); box-sh
 .install-card p { margin: 3px 0 0; color: var(--muted); font-size: .88rem; }
 .install-card button { padding: 10px 16px; border: 1px solid #eacbb5; border-radius: 999px; color: var(--primary-deep); background: #fff7ef; font-weight: 750; }
 
-footer { padding: 30px 20px 0; color: var(--muted); text-align: center; font-size: .84rem; }
-footer p { margin: 5px 0; }
-.footer-disclaimer { opacity: .75; }
+.site-footer { padding: 30px 20px 0; color: var(--muted); text-align: center; font-size: .84rem; }
+.site-footer p { margin: 5px 0; }
+.footer-brand { color: var(--primary-deep); font-size: .94rem; font-weight: 850; }
+.footer-brand span:last-child { display: block; margin-top: 1px; color: var(--muted); font-size: .73rem; letter-spacing: .12em; }
+.footer-lines { display: grid; justify-items: center; gap: 5px; margin-top: 11px; line-height: 1.45; opacity: .82; }
+.footer-lines span { display: block; }
 
 .toast {
   position: fixed;
@@ -365,6 +386,11 @@ dialog::backdrop { background: rgba(47,33,27,.4); backdrop-filter: blur(5px); }
 .install-steps { display: grid; gap: 10px; margin: 20px 0; text-align: left; }
 .install-step { padding: 14px; border-radius: 14px; background: #fff; }
 .dialog-card .primary-button { width: 100%; padding: 13px; color: #fff; background: var(--primary); }
+.save-card { width: min(100%, 470px); margin: auto; }
+.save-card h2 { padding: 0 28px; }
+.save-preview { display: block; width: 100%; max-height: 52vh; object-fit: contain; border-radius: 18px !important; background: #fff8ef; }
+.save-card p { margin: 13px 0; color: var(--muted); font-size: .88rem; line-height: 1.55; }
+.save-card .secondary-button { width: 100%; margin-top: 9px; border-radius: 14px; }
 .history-card { text-align: left; }
 .history-list { display: grid; gap: 10px; max-height: 55vh; overflow-y: auto; }
 .history-entry { padding: 14px; border: 1px solid var(--border); border-radius: 14px; background: #fff; cursor: pointer; }
@@ -414,11 +440,17 @@ dialog::backdrop { background: rgba(47,33,27,.4); backdrop-filter: blur(5px); }
   #cardCanvas { max-height: 560px; }
   .canvas-actions { grid-template-columns: 1fr; }
   .template-scroller { grid-auto-columns: 132px; }
+  .photo-tools { align-items: stretch; flex-direction: column; gap: 11px; }
+  .photo-actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .photo-actions button { min-height: 42px; padding: 8px; }
   .install-card { grid-template-columns: auto 1fr; padding: 15px; }
   .install-card button { grid-column: 1 / -1; width: 100%; }
   .dialog-card { padding: 24px 18px; }
+  .footer-lines { gap: 7px; font-size: .78rem; }
+  .footer-lines span { width: min(100%, 310px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+

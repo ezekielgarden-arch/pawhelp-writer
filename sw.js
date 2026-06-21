@@ -1,4 +1,4 @@
-const CACHE = "pawhelp-writer-v4";
+const CACHE = "pawhelp-writer-v5";
 const ASSETS = [
   "./",
   "./index.html",
@@ -10,10 +10,19 @@ const ASSETS = [
   "./js/app-05.js",
   "./js/app-06.js",
   "./js/app-07.js",
+  "./js/app-08.js",
+  "./js/app-09.js",
+  "./js/app-10.js",
   "./manifest.webmanifest",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/apple-touch-icon.png"
+  ,"./assets/photos/voice-cat.jpg"
+  ,"./assets/photos/paper-pets.jpg"
+  ,"./assets/photos/urgent-cat.jpg"
+  ,"./assets/photos/starlight-cat.jpg"
+  ,"./assets/photos/polaroid-cat.jpg"
+  ,"./assets/photos/editorial-dog.jpg"
 ];
 
 self.addEventListener("install", (event) => {

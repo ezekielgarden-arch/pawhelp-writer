@@ -44,11 +44,13 @@ function renderTemplates() {
     const small = document.createElement('small'); small.textContent = template.zh;
     button.append(canvas, strong, small);
     button.addEventListener('click', () => {
-      state.template = template.id; $('#templatePosition').textContent = `${index + 1} / 10`; renderTemplates(); drawMainCard();
+      state.template = template.id; $('#templatePosition').textContent = `${index + 1} / ${templates.length}`; renderTemplates(); updatePhotoControls(); drawMainCard();
     });
     requestAnimationFrame(() => drawCard(canvas, state.lastData, state.lastCopy, template.id, true));
     return button;
   }));
+  const activeIndex = Math.max(0, templates.findIndex((item) => item.id === state.template));
+  $('#templatePosition').textContent = `${activeIndex + 1} / ${templates.length}`;
 }
 
 function showToast(message) {
@@ -75,9 +77,43 @@ function fileName() {
   return state.lang === 'zh' ? `喵汪求助卡-${animal}-${stamp}.png` : `pawhelp-card-${animal}-${stamp}.png`;
 }
 
+let savePreviewUrl = '';
+let savePreviewBlob = null;
+
+function directDownload(blob) {
+  const url = URL.createObjectURL(blob); const link = document.createElement('a');
+  link.href = url; link.download = fileName(); document.body.append(link); link.click(); link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+
+function openSavePreview(blob) {
+  if (savePreviewUrl) URL.revokeObjectURL(savePreviewUrl);
+  savePreviewBlob = blob; savePreviewUrl = URL.createObjectURL(blob);
+  $('#savePreview').src = savePreviewUrl;
+  if (!$('#saveDialog').open) $('#saveDialog').showModal();
+}
+
+function closeSavePreview() {
+  if ($('#saveDialog').open) $('#saveDialog').close();
+  $('#savePreview').removeAttribute('src');
+  if (savePreviewUrl) URL.revokeObjectURL(savePreviewUrl);
+  savePreviewUrl = ''; savePreviewBlob = null;
+}
+
+async function systemSaveOrShare() {
+  if (!savePreviewBlob) return;
+  const file = new File([savePreviewBlob], fileName(), { type: 'image/png' });
+  if (navigator.canShare?.({ files: [file] })) {
+    try { await navigator.share({ files: [file], title: state.lastCopy.title }); return; }
+    catch (error) { if (error.name === 'AbortError') return; }
+  }
+  directDownload(savePreviewBlob);
+}
+
 async function downloadCard(showMessage = true) {
-  const blob = await canvasBlob($('#cardCanvas')); const url = URL.createObjectURL(blob); const link = document.createElement('a');
-  link.href = url; link.download = fileName(); document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1500);
+  const blob = await canvasBlob($('#cardCanvas'));
+  const onPhone = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || navigator.maxTouchPoints > 1;
+  if (onPhone) openSavePreview(blob); else directDownload(blob);
   if (showMessage) showToast(t('saved')); return blob;
 }
 
@@ -87,7 +123,7 @@ async function shareCard() {
     try { await navigator.share({ files: [file], title: state.lastCopy.title, text: state.lastCopy.paw }); showToast(t('cardShared')); return; }
     catch (error) { if (error.name === 'AbortError') return; }
   }
-  await downloadCard(false); showToast(t('shareUnavailable'));
+  openSavePreview(blob); showToast(t('shareUnavailable'));
 }
 
 function bindEvents() {
@@ -101,6 +137,19 @@ function bindEvents() {
   $('#copyPost').addEventListener('click', copyPost); $('#sharePost').addEventListener('click', sharePost);
   $('#editPost').addEventListener('click', () => { $('#rescueForm').scrollIntoView({ behavior: 'smooth', block: 'start' }); $('#details').focus({ preventScroll: true }); });
   $('#downloadCard').addEventListener('click', () => downloadCard()); $('#shareCard').addEventListener('click', shareCard);
+  $('#choosePhoto').addEventListener('click', () => $('#photoUpload').click());
+  $('#photoUpload').addEventListener('change', (event) => {
+    const file = event.target.files?.[0]; if (!file || !file.type.startsWith('image/')) return;
+    if (state.userPhotoUrl) URL.revokeObjectURL(state.userPhotoUrl);
+    state.userPhotoUrl = URL.createObjectURL(file); const image = new Image();
+    image.onload = () => { state.userPhoto = image; state.photoMode = 'user'; updatePhotoControls(); renderTemplates(); drawMainCard(); };
+    image.src = state.userPhotoUrl;
+  });
+  $('#useBuiltIn').addEventListener('click', () => { state.photoMode = 'builtIn'; updatePhotoControls(); renderTemplates(); drawMainCard(); });
+  $('#closeSave').addEventListener('click', closeSavePreview);
+  $('#saveCloseButton').addEventListener('click', closeSavePreview);
+  $('#saveSystemShare').addEventListener('click', systemSaveOrShare);
+  $('#saveDialog').addEventListener('cancel', (event) => { event.preventDefault(); closeSavePreview(); });
   $('#ratioSwitch').addEventListener('click', (event) => {
     const button = event.target.closest('button[data-ratio]'); if (!button) return; state.ratio = button.dataset.ratio;
     $$('#ratioSwitch button').forEach((item) => item.classList.toggle('active', item === button)); drawMainCard();
@@ -120,12 +169,11 @@ function init() {
   renderSelects();
   const starter = { animal: 'cat', age: 'adult', condition: 'injured', helpType: 'foster', location: '', contact: '', tone: 'gentle', platform: 'xiaohongshu', length: 'medium', details: '' };
   applyData(starter); state.lastData = starter; state.lastCopy = buildCopy(starter);
-  bindEvents(); renderLanguage(); renderPost(); drawMainCard(); renderHistory();
+  bindEvents(); preloadTemplateImages(); renderLanguage(); renderPost(); drawMainCard(); renderHistory();
   if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./sw.js').catch(() => {});
 }
 
 document.addEventListener('DOMContentLoaded', init);
 
 // Canvas rendering follows. The preview and exported PNG use the same drawing path.
-
 

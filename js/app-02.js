@@ -31,15 +31,19 @@ const optionSets = {
 
 const templates = [
   { id: "warm", en: "Warm Minimal", zh: "暖色极简" },
-  { id: "journal", en: "Soft Journal", zh: "温柔手账" },
   { id: "notice", en: "Rescue Notice", zh: "清晰公告" },
-  { id: "cute", en: "Cute Paw", zh: "可爱小爪" },
   { id: "green", en: "Calm Green", zh: "自然治愈" },
-  { id: "xhs", en: "Social Cover", zh: "小红书封面" },
-  { id: "polaroid", en: "Polaroid Story", zh: "拍立得故事" },
   { id: "alert", en: "Gentle Alert", zh: "温柔紧急" },
-  { id: "community", en: "Community Poster", zh: "社区海报" },
-  { id: "quote", en: "Simple Quote", zh: "治愈短句" }
+  { id: "quote", en: "Simple Quote", zh: "治愈短句" },
+  { id: "voice-photo", en: "Gentle Voice", zh: "小爪心声", photo: "assets/photos/voice-cat.jpg", focusX: .68 },
+  { id: "paper-pets", en: "Paper Pet Haven", zh: "纸艺相依", photo: "assets/photos/paper-pets.jpg", focusX: .5 },
+  { id: "urgent-photo", en: "Warm Urgent", zh: "温柔急助", photo: "assets/photos/urgent-cat.jpg", focusX: .5 },
+  { id: "starlight-photo", en: "Starlight Hope", zh: "星光守望", photo: "assets/photos/starlight-cat.jpg", focusX: .62 },
+  { id: "polaroid-photo", en: "Polaroid Story", zh: "拍立得故事", photo: "assets/photos/polaroid-cat.jpg", focusX: .5 },
+  { id: "editorial-photo", en: "Editorial Rescue", zh: "杂志救助", photo: "assets/photos/editorial-dog.jpg", focusX: .58 },
+  { id: "floral-kindness", en: "Floral Kindness", zh: "花语善意" },
+  { id: "warm-appeal", en: "Warm Appeal", zh: "暖橘呼吁" },
+  { id: "scrapbook-help", en: "Scrapbook Help", zh: "手账求助" }
 ];
 
 const ratioSizes = {
@@ -53,6 +57,9 @@ const state = {
   lastData: null,
   lastCopy: null,
   installPrompt: null,
+  userPhoto: null,
+  userPhotoUrl: "",
+  photoMode: "builtIn",
   history: (() => {
     try { return JSON.parse(localStorage.getItem('pawhelp-history') || '[]'); }
     catch { return []; }
@@ -61,6 +68,16 @@ const state = {
 
 function t(key) { return copybook[state.lang][key] || key; }
 function optionLabel(group, value, lang = state.lang) { return optionSets[group].find((item) => item.value === value)?.[lang] || value; }
+function currentTemplate() { return templates.find((item) => item.id === state.template) || templates[0]; }
+function templateHasPhoto(id = state.template) { return Boolean(templates.find((item) => item.id === id)?.photo); }
+
+function updatePhotoControls() {
+  const tools = $('#photoTools');
+  if (!tools) return;
+  tools.hidden = !templateHasPhoto();
+  $('#photoStatus').textContent = state.photoMode === 'user' && state.userPhoto ? t('photoReady') : t('builtInActive');
+  $('#useBuiltIn').classList.toggle('active', state.photoMode === 'builtIn');
+}
 
 function renderLanguage() {
   document.documentElement.lang = state.lang === "zh" ? "zh-CN" : "en";
@@ -71,6 +88,7 @@ function renderLanguage() {
   renderSelects();
   renderInstallSteps();
   renderTemplates();
+  updatePhotoControls();
   if (state.lastData) {
     state.lastCopy = buildCopy(state.lastData);
     renderPost();

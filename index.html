@@ -6,13 +6,13 @@
   <meta name="description" content="小爪帮帮 PawHelp：双语流浪猫狗求助文案与图片卡片生成器。">
   <meta name="theme-color" content="#E9825A">
   <meta name="color-scheme" content="light">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest?v=5">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=5">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="PawHelp">
+  <meta name="apple-mobile-web-app-title" content="小爪帮帮 PawHelp">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="icon" href="icons/icon-192.png">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="icons/icon-192.png?v=5">
+  <link rel="stylesheet" href="styles.css?v=5">
   <title>小爪帮帮 PawHelp</title>
 </head>
 <body>
@@ -20,7 +20,7 @@
   <div class="app-shell">
     <header class="hero">
       <div class="brand-lockup">
-        <img class="brand-icon" src="icons/icon-192.png" alt="" width="74" height="74">
+        <img class="brand-icon" src="icons/icon-192.png?v=5" alt="" width="74" height="74">
         <div>
           <p class="eyebrow" data-i18n="eyebrow">给流浪的小爪一点声音</p>
           <h1><span data-i18n="brandZh">小爪帮帮</span> <em data-i18n="brandEn">PawHelp</em></h1>
@@ -185,29 +185,46 @@
           </div>
 
           <div class="template-column">
+            <div class="photo-tools" id="photoTools" hidden>
+              <div class="photo-tools-copy">
+                <strong data-i18n="photoTools">动物照片</strong>
+                <small data-i18n="photoHint">带照片的模板可上传自己的图片，也可直接使用自带图</small>
+                <span id="photoStatus">正在使用自带图</span>
+              </div>
+              <div class="photo-actions">
+                <input type="file" id="photoUpload" accept="image/*" hidden>
+                <button type="button" id="choosePhoto" data-i18n="uploadPhoto">上传自己的照片</button>
+                <button type="button" id="useBuiltIn" class="active" data-i18n="useBuiltIn">使用自带图</button>
+              </div>
+            </div>
             <div class="template-title-row">
               <h3 data-i18n="templates">选择模板</h3>
-              <span id="templatePosition">1 / 10</span>
+              <span id="templatePosition">1 / 14</span>
             </div>
             <div class="template-scroller" id="templateScroller" aria-label="Templates"></div>
             <div class="card-note">
               <span class="mini-paw" aria-hidden="true">🐾</span>
-              <div><strong data-i18n="cardTipTitle">小提醒</strong><p data-i18n="cardTip">卡片负责让人停下来，完整情况放在配套文案里更好读。</p></div>
+              <div><strong data-i18n="cardTipTitle">小提醒</strong><p data-i18n="cardTip">卡片负责让人停下来，完整情况放在配套文案里更好读</p></div>
             </div>
           </div>
         </div>
       </section>
 
       <section class="install-card">
-        <img src="icons/icon-192.png" alt="" width="58" height="58">
-        <div><strong data-i18n="installTitle">把小爪帮帮带在手机里</strong><p data-i18n="installText">添加到手机桌面，遇到流浪猫狗时可以快速打开。</p></div>
+        <img src="icons/icon-192.png?v=5" alt="" width="58" height="58">
+        <div><strong data-i18n="installTitle">把小爪帮帮带在手机里</strong><p data-i18n="installText">添加到手机桌面，遇到流浪猫狗时可以快速打开</p></div>
         <button type="button" id="installButton" data-i18n="installHow">如何添加到桌面</button>
       </section>
     </main>
 
-    <footer>
-      <p><span aria-hidden="true">♡</span> PawHelp Writer · <span data-i18n="footer">愿每一次被看见，都离帮助更近一点。</span></p>
-      <p class="footer-disclaimer" data-i18n="disclaimer">请以现场观察为准；受伤动物应尽快联系专业救助或宠物医院。</p>
+    <footer class="site-footer">
+      <p class="footer-brand"><span aria-hidden="true">♡</span> 小爪帮帮 <span>PawHelp</span></p>
+      <div class="footer-lines">
+        <span data-i18n="footerPrivacy">内容只保存在你的浏览器</span>
+        <span data-i18n="footerObserve">请以现场观察为准</span>
+        <span data-i18n="footerCare">受伤动物请尽快联系专业救助或宠物医院</span>
+        <span data-i18n="footer">愿每一次被看见，都离帮助更近一点</span>
+      </div>
     </footer>
   </div>
 
@@ -216,11 +233,22 @@
   <dialog id="installDialog">
     <form method="dialog" class="dialog-card">
       <button class="dialog-close" value="close" aria-label="Close">×</button>
-      <img src="icons/icon-192.png" alt="" width="82" height="82">
+      <img src="icons/icon-192.png?v=5" alt="" width="82" height="82">
       <h2 data-i18n="installDialogTitle">添加 PawHelp 到主屏幕</h2>
       <div class="install-steps" id="installSteps"></div>
       <button class="primary-button" value="close" data-i18n="gotIt">知道了</button>
     </form>
+  </dialog>
+
+  <dialog id="saveDialog">
+    <div class="dialog-card save-card">
+      <button class="dialog-close" id="closeSave" type="button" aria-label="Close">×</button>
+      <h2 data-i18n="saveDialogTitle">保存求助图片</h2>
+      <img id="savePreview" class="save-preview" alt="Generated rescue card">
+      <p data-i18n="saveDialogHint">长按图片选择保存，或点击下方按钮打开手机系统菜单</p>
+      <button class="primary-button" id="saveSystemShare" type="button" data-i18n="systemShare">打开系统保存 / 分享</button>
+      <button class="secondary-button" id="saveCloseButton" type="button" data-i18n="close">关闭</button>
+    </div>
   </dialog>
 
   <dialog id="historyDialog">
@@ -232,13 +260,16 @@
     </div>
   </dialog>
 
-  <script src="js/app-01.js?v=4" defer></script>
-  <script src="js/app-02.js?v=4" defer></script>
-  <script src="js/app-03.js?v=4" defer></script>
-  <script src="js/app-04.js?v=4" defer></script>
-  <script src="js/app-05.js?v=4" defer></script>
-  <script src="js/app-06.js?v=4" defer></script>
-  <script src="js/app-07.js?v=4" defer></script>
+  <script src="js/app-01.js?v=5" defer></script>
+  <script src="js/app-02.js?v=5" defer></script>
+  <script src="js/app-03.js?v=5" defer></script>
+  <script src="js/app-04.js?v=5" defer></script>
+  <script src="js/app-05.js?v=5" defer></script>
+  <script src="js/app-06.js?v=5" defer></script>
+  <script src="js/app-08.js?v=5" defer></script>
+  <script src="js/app-09.js?v=5" defer></script>
+  <script src="js/app-10.js?v=5" defer></script>
+  <script src="js/app-07.js?v=5" defer></script>
 </body>
 </html>
 

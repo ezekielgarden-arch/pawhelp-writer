@@ -89,6 +89,40 @@ function drawAnimalDoodle(ctx, x, y, size, palette = {}) {
   ctx.restore();
 }
 
+const templateImages = new Map();
+
+function preloadTemplateImages() {
+  templates.filter((template) => template.photo).forEach((template) => {
+    if (templateImages.has(template.id)) return;
+    const image = new Image(); image.decoding = 'async';
+    image.onload = () => { templateImages.set(template.id, image); drawMainCard(); renderTemplates(); };
+    image.src = `${template.photo}?v=5`;
+  });
+}
+
+function getTemplatePhoto(templateId) {
+  if (state.photoMode === 'user' && state.userPhoto) return state.userPhoto;
+  return templateImages.get(templateId) || null;
+}
+
+function drawCoverImage(ctx, image, x, y, width, height, radius = 0, focusX = .5, focusY = .5) {
+  if (!image?.naturalWidth || !image?.naturalHeight) return false;
+  const sourceRatio = image.naturalWidth / image.naturalHeight; const targetRatio = width / height;
+  let sx = 0, sy = 0, sw = image.naturalWidth, sh = image.naturalHeight;
+  if (sourceRatio > targetRatio) { sw = sh * targetRatio; sx = (image.naturalWidth - sw) * focusX; }
+  else { sh = sw / targetRatio; sy = (image.naturalHeight - sh) * focusY; }
+  ctx.save();
+  if (radius) { roundedRect(ctx, x, y, width, height, radius); ctx.clip(); }
+  ctx.drawImage(image, sx, sy, sw, sh, x, y, width, height); ctx.restore(); return true;
+}
+
+function drawTemplatePhoto(ctx, templateId, x, y, width, height, radius, unit, focusX, focusY = .5) {
+  const template = templates.find((item) => item.id === templateId); const image = getTemplatePhoto(templateId);
+  if (drawCoverImage(ctx, image, x, y, width, height, radius, focusX ?? template?.focusX ?? .5, focusY)) return;
+  roundedRect(ctx, x, y, width, height, radius, gradientFill(ctx, x, y, x + width, y + height, [[0, '#f8d8c0'], [1, '#e5edda']]));
+  drawAnimalDoodle(ctx, x + width / 2, y + height / 2, Math.min(width, height) * .42);
+}
+
 function drawBadge(ctx, text, x, y, color, background, unit, align = 'left') {
   ctx.font = `700 ${Math.max(8, 25 * unit)}px ${getCanvasFont()}`;
   const pad = 18 * unit; const height = 48 * unit; const width = ctx.measureText(text).width + pad * 2;
@@ -132,5 +166,4 @@ function drawFooter(ctx, x, y, width, unit, color = '#7a6a5e', align = 'left') {
   ctx.fillStyle = color; ctx.font = bodyFont(unit, 20, 700); ctx.textAlign = align;
   ctx.fillText(t('footerMark'), align === 'center' ? x + width / 2 : align === 'right' ? x + width : x, y); ctx.textAlign = 'left';
 }
-
 
