@@ -3,7 +3,7 @@ function drawVoicePhoto(ctx,w,h,data,copy,u){
   ctx.fillStyle='#f7e8da';ctx.font=`900 ${150*u}px Georgia,serif`;ctx.fillText('“',m,45*u);
   drawPaw(ctx,w-92*u,116*u,92*u,'#df9b76',.8);
   ctx.fillStyle='#9e472d';ctx.font=titleFont(u,64,760);let ty=drawWrapped(ctx,copy.paw,m,180*u,cw,76*u,3);
-  ctx.fillStyle='#7b675b';ctx.font=bodyFont(u,25,650);drawWrapped(ctx,state.lang==='zh'?'— 一只等待帮助的小生命':'— A small life waiting for help',m,ty+8*u,cw,34*u,2);
+  ctx.fillStyle='#7b675b';ctx.font=bodyFont(u,25,650);drawWrapped(ctx,state.lang==='zh'?'等待帮助的小生命':'A small life waiting for help',m,ty+8*u,cw,34*u,2);
   const photoY=Math.max(ty+75*u,h*.42),photoH=Math.max(240*u,h-photoY-330*u);
   drawTemplatePhoto(ctx,'voice-photo',w*.54,photoY,w*.42,photoH,28*u,u,.68,.54);
   ctx.fillStyle='#49362e';ctx.font=bodyFont(u,28);drawWrapped(ctx,copy.cardBody,m,photoY+18*u,w*.45,43*u,Math.min(6,lineLimit(data)));

@@ -36,5 +36,5 @@ Use a title, short body, up to five information items, contact, one paw-thought 
 
 ## Use the bundled PWA
 
-The repository root contains an offline-first GitHub Pages app with bilingual UI, fourteen visual templates, optional user-photo upload, local history, and high-resolution image saving. Keep it dependency-free and preserve the supplied brand icon when modifying the app. Photo uploads must stay in the browser and must never be sent to a server.
+The repository root contains an offline-first GitHub Pages app with bilingual UI, fifteen visual templates, optional user-photo upload, local history, and high-resolution image saving. Keep it dependency-free and preserve the supplied brand icon when modifying the app. Photo uploads must stay in the browser and must never be sent to a server. Preserve the copyright notice and the non-commercial rescue-use boundary in `LICENSE`.
 

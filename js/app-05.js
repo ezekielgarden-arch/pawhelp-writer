@@ -37,7 +37,8 @@ function wrapLines(ctx, text, maxWidth, maxLines) {
 }
 
 function drawWrapped(ctx, text, x, y, maxWidth, lineHeight, maxLines, align = 'left') {
-  const lines = wrapLines(ctx, text, maxWidth, maxLines);
+  const cleanText = String(text || '').replace(/[。！？.!?]+(?=[”"’'）)】》」』]*\s*$)/, '');
+  const lines = wrapLines(ctx, cleanText, maxWidth, maxLines);
   ctx.textAlign = align;
   const anchor = align === 'center' ? x + maxWidth / 2 : align === 'right' ? x + maxWidth : x;
   lines.forEach((line, index) => ctx.fillText(line, anchor, y + index * lineHeight));
@@ -96,7 +97,7 @@ function preloadTemplateImages() {
     if (templateImages.has(template.id)) return;
     const image = new Image(); image.decoding = 'async';
     image.onload = () => { templateImages.set(template.id, image); drawMainCard(); renderTemplates(); };
-    image.src = `${template.photo}?v=5`;
+    image.src = `${template.photo}?v=6`;
   });
 }
 

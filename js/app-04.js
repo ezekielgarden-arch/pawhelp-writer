@@ -1,3 +1,6 @@
+window.addEventListener('beforeinstallprompt', (event) => { event.preventDefault(); state.installPrompt = event; });
+window.addEventListener('appinstalled', () => { state.installPrompt = null; });
+
 function readHistory() {
   try { return JSON.parse(localStorage.getItem('pawhelp-history') || '[]'); } catch { return []; }
 }
@@ -28,8 +31,11 @@ function renderHistory() {
 
 function renderInstallSteps() {
   const steps = $('#installSteps');
-  steps.replaceChildren(...[t('installIos'), t('installAndroid')].map((text, index) => {
-    const div = document.createElement('div'); div.className = 'install-step'; div.textContent = `${index === 0 ? '' : '●'}  ${text}`; return div;
+  const android = /Android/i.test(navigator.userAgent);
+  const ios = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const items = android ? [t('installAndroid'), t('installAndroidOpen'), t('installAndroidMenu'), t('installAndroidReady')] : ios ? [t('installIos')] : [t('installIos'), t('installAndroid'), t('installAndroidMenu')];
+  steps.replaceChildren(...items.map((text, index) => {
+    const div = document.createElement('div'); div.className = 'install-step'; div.textContent = `${ios ? '' : index + 1}  ${text}`; return div;
   }));
 }
 
@@ -107,12 +113,30 @@ async function systemSaveOrShare() {
     try { await navigator.share({ files: [file], title: state.lastCopy.title }); return; }
     catch (error) { if (error.name === 'AbortError') return; }
   }
-  directDownload(savePreviewBlob);
+  if (/Android/i.test(navigator.userAgent)) openOriginalImage(); else directDownload(savePreviewBlob);
+}
+
+function openOriginalImage() {
+  if (!savePreviewBlob) return;
+  const url = URL.createObjectURL(savePreviewBlob); const opened = window.open(url, '_blank');
+  if (opened) opened.opener = null;
+  if (!opened) {
+    const link = document.createElement('a'); link.href = url; link.target = '_blank'; link.rel = 'noopener'; document.body.append(link); link.click(); link.remove();
+  }
+  setTimeout(() => URL.revokeObjectURL(url), 300000); showToast(t('openedOriginal'));
 }
 
 async function downloadCard(showMessage = true) {
-  const blob = await canvasBlob($('#cardCanvas'));
-  const onPhone = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || navigator.maxTouchPoints > 1;
+  const blob = await canvasBlob($('#cardCanvas')); const android = /Android/i.test(navigator.userAgent);
+  if (android) {
+    const file = new File([blob], fileName(), { type: 'image/png' });
+    if (navigator.canShare?.({ files: [file] })) {
+      try { await navigator.share({ files: [file], title: state.lastCopy.title }); if (showMessage) showToast(t('saved')); return blob; }
+      catch (error) { if (error.name === 'AbortError') return blob; }
+    }
+    openSavePreview(blob); if (showMessage) showToast(t('androidSaveHint')); return blob;
+  }
+  const onPhone = /iPhone|iPad|iPod/i.test(navigator.userAgent) || navigator.maxTouchPoints > 1;
   if (onPhone) openSavePreview(blob); else directDownload(blob);
   if (showMessage) showToast(t('saved')); return blob;
 }
@@ -149,6 +173,7 @@ function bindEvents() {
   $('#closeSave').addEventListener('click', closeSavePreview);
   $('#saveCloseButton').addEventListener('click', closeSavePreview);
   $('#saveSystemShare').addEventListener('click', systemSaveOrShare);
+  $('#openOriginal').addEventListener('click', openOriginalImage);
   $('#saveDialog').addEventListener('cancel', (event) => { event.preventDefault(); closeSavePreview(); });
   $('#ratioSwitch').addEventListener('click', (event) => {
     const button = event.target.closest('button[data-ratio]'); if (!button) return; state.ratio = button.dataset.ratio;
@@ -161,8 +186,8 @@ function bindEvents() {
   $('#historyButton').addEventListener('click', () => { renderHistory(); $('#historyDialog').showModal(); });
   $('#closeHistory').addEventListener('click', () => $('#historyDialog').close());
   $('#clearHistory').addEventListener('click', () => { state.history = []; writeHistory(); renderHistory(); showToast(t('cleared')); });
-  window.addEventListener('beforeinstallprompt', (event) => { event.preventDefault(); state.installPrompt = event; });
-  window.addEventListener('appinstalled', () => { state.installPrompt = null; });
+  $('#copyrightButton').addEventListener('click', () => $('#copyrightDialog').showModal());
+  $('#closeCopyright').addEventListener('click', () => $('#copyrightDialog').close());
 }
 
 function init() {
@@ -170,7 +195,7 @@ function init() {
   const starter = { animal: 'cat', age: 'adult', condition: 'injured', helpType: 'foster', location: '', contact: '', tone: 'gentle', platform: 'xiaohongshu', length: 'medium', details: '' };
   applyData(starter); state.lastData = starter; state.lastCopy = buildCopy(starter);
   bindEvents(); preloadTemplateImages(); renderLanguage(); renderPost(); drawMainCard(); renderHistory();
-  if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./sw.js').catch(() => {});
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./sw.js?v=6').catch(() => {});
 }
 
 document.addEventListener('DOMContentLoaded', init);

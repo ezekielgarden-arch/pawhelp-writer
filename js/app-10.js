@@ -23,6 +23,21 @@ function drawWarmAppeal(ctx,w,h,data,copy,u){
   drawFooter(ctx,m,h-50*u,cw,u,'#a37256','center');
 }
 
+function drawMoonlightShelter(ctx,w,h,data,copy,u){
+  ctx.fillStyle=gradientFill(ctx,0,0,w,h,[[0,'#263347'],[.58,'#4d5c6c'],[1,'#d7bda7']]);ctx.fillRect(0,0,w,h);const m=58*u,cw=w-m*2;
+  ctx.fillStyle='#f8ddb4';ctx.beginPath();ctx.arc(w*.79,135*u,70*u,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#263347';ctx.beginPath();ctx.arc(w*.82,112*u,66*u,0,Math.PI*2);ctx.fill();
+  for(let i=0;i<18;i++){ctx.fillStyle='rgba(255,239,205,.72)';ctx.beginPath();ctx.arc(((95+i*113)%950)*u,((75+i*167)%520)*u,(2+i%3)*u,0,Math.PI*2);ctx.fill();}
+  drawBadge(ctx,state.lang==='zh'?'今晚待助':'HELP NEEDED TONIGHT',m,72*u,'#283548','#f8ddb4',u);
+  ctx.fillStyle='#fff8eb';ctx.font=titleFont(u,68,820);let ty=drawWrapped(ctx,copy.title,m,185*u,cw,80*u,3);
+  roundedRect(ctx,m,ty+34*u,cw,h-ty-285*u,32*u,'rgba(255,250,241,.94)');
+  ctx.fillStyle='#415063';ctx.font=bodyFont(u,30);ty=drawWrapped(ctx,copy.cardBody,m+45*u,ty+82*u,cw-90*u,46*u,Math.min(lineLimit(data),7));
+  drawInfoChips(ctx,data,copy,m+45*u,Math.max(ty+28*u,h-325*u),cw-90*u,u,{bg:'#e8ddd1',text:'#425066'});
+  drawContact(ctx,copy,m+45*u,h-220*u,cw-90*u,u,'#f0d1aa','#3c4654');
+  ctx.fillStyle='#fff6e8';ctx.font=bodyFont(u,24,750);drawWrapped(ctx,copy.paw,m,h-122*u,cw,34*u,2,'center');
+  drawFooter(ctx,m,h-58*u,cw,u,'#f6e8d5','center');
+}
+
 function drawScrapbookHelp(ctx,w,h,data,copy,u){
   ctx.fillStyle='#ead3b7';ctx.fillRect(0,0,w,h);const m=45*u,cw=w-m*2;
   roundedRect(ctx,m,75*u,cw,h-150*u,7*u,'#fff7e9');

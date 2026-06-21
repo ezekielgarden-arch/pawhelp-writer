@@ -6,13 +6,15 @@
   <meta name="description" content="小爪帮帮 PawHelp：双语流浪猫狗求助文案与图片卡片生成器。">
   <meta name="theme-color" content="#E9825A">
   <meta name="color-scheme" content="light">
-  <link rel="manifest" href="manifest.webmanifest?v=5">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=5">
+  <link rel="manifest" href="manifest.webmanifest?v=6">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=6">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="小爪帮帮 PawHelp">
   <meta name="apple-mobile-web-app-title" content="小爪帮帮 PawHelp">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="icon" href="icons/icon-192.png?v=5">
-  <link rel="stylesheet" href="styles.css?v=5">
+  <link rel="icon" href="icons/icon-192.png?v=6" sizes="192x192">
+  <link rel="stylesheet" href="styles.css?v=6">
   <title>小爪帮帮 PawHelp</title>
 </head>
 <body>
@@ -20,7 +22,7 @@
   <div class="app-shell">
     <header class="hero">
       <div class="brand-lockup">
-        <img class="brand-icon" src="icons/icon-192.png?v=5" alt="" width="74" height="74">
+        <img class="brand-icon" src="icons/icon-192.png?v=6" alt="" width="74" height="74">
         <div>
           <p class="eyebrow" data-i18n="eyebrow">给流浪的小爪一点声音</p>
           <h1><span data-i18n="brandZh">小爪帮帮</span> <em data-i18n="brandEn">PawHelp</em></h1>
@@ -199,7 +201,7 @@
             </div>
             <div class="template-title-row">
               <h3 data-i18n="templates">选择模板</h3>
-              <span id="templatePosition">1 / 14</span>
+              <span id="templatePosition">1 / 15</span>
             </div>
             <div class="template-scroller" id="templateScroller" aria-label="Templates"></div>
             <div class="card-note">
@@ -211,7 +213,7 @@
       </section>
 
       <section class="install-card">
-        <img src="icons/icon-192.png?v=5" alt="" width="58" height="58">
+        <img src="icons/icon-192.png?v=6" alt="" width="58" height="58">
         <div><strong data-i18n="installTitle">把小爪帮帮带在手机里</strong><p data-i18n="installText">添加到手机桌面，遇到流浪猫狗时可以快速打开</p></div>
         <button type="button" id="installButton" data-i18n="installHow">如何添加到桌面</button>
       </section>
@@ -225,6 +227,8 @@
         <span data-i18n="footerCare">受伤动物请尽快联系专业救助或宠物医院</span>
         <span data-i18n="footer">愿每一次被看见，都离帮助更近一点</span>
       </div>
+      <p class="copyright-line" data-i18n="copyrightLine">© 2026 小爪帮帮 PawHelp · 保留所有权利</p>
+      <button class="copyright-button" id="copyrightButton" type="button" data-i18n="copyrightButton">版权与使用说明</button>
     </footer>
   </div>
 
@@ -233,7 +237,7 @@
   <dialog id="installDialog">
     <form method="dialog" class="dialog-card">
       <button class="dialog-close" value="close" aria-label="Close">×</button>
-      <img src="icons/icon-192.png?v=5" alt="" width="82" height="82">
+      <img src="icons/icon-192.png?v=6" alt="" width="82" height="82">
       <h2 data-i18n="installDialogTitle">添加 PawHelp 到主屏幕</h2>
       <div class="install-steps" id="installSteps"></div>
       <button class="primary-button" value="close" data-i18n="gotIt">知道了</button>
@@ -245,8 +249,9 @@
       <button class="dialog-close" id="closeSave" type="button" aria-label="Close">×</button>
       <h2 data-i18n="saveDialogTitle">保存求助图片</h2>
       <img id="savePreview" class="save-preview" alt="Generated rescue card">
-      <p data-i18n="saveDialogHint">长按图片选择保存，或点击下方按钮打开手机系统菜单</p>
+      <p data-i18n="saveDialogHint">安卓手机可先打开系统保存/分享；如仍失败，请打开原图后长按保存</p>
       <button class="primary-button" id="saveSystemShare" type="button" data-i18n="systemShare">打开系统保存 / 分享</button>
+      <button class="secondary-button" id="openOriginal" type="button" data-i18n="openOriginal">打开原图保存</button>
       <button class="secondary-button" id="saveCloseButton" type="button" data-i18n="close">关闭</button>
     </div>
   </dialog>
@@ -260,16 +265,30 @@
     </div>
   </dialog>
 
-  <script src="js/app-01.js?v=5" defer></script>
-  <script src="js/app-02.js?v=5" defer></script>
-  <script src="js/app-03.js?v=5" defer></script>
-  <script src="js/app-04.js?v=5" defer></script>
-  <script src="js/app-05.js?v=5" defer></script>
-  <script src="js/app-06.js?v=5" defer></script>
-  <script src="js/app-08.js?v=5" defer></script>
-  <script src="js/app-09.js?v=5" defer></script>
-  <script src="js/app-10.js?v=5" defer></script>
-  <script src="js/app-07.js?v=5" defer></script>
+  <dialog id="copyrightDialog">
+    <div class="dialog-card copyright-card">
+      <button class="dialog-close" id="closeCopyright" type="button" aria-label="Close">×</button>
+      <h2 data-i18n="copyrightTitle">版权与使用说明</h2>
+      <p data-i18n="copyrightIntro">小爪帮帮 PawHelp 的程序代码、品牌名称、图标、界面设计、模板和内置视觉素材受版权保护</p>
+      <ul>
+        <li data-i18n="copyrightCode">未经书面许可，不得复制、出售、重新发布或用于制作同类商业产品</li>
+        <li data-i18n="copyrightUser">用户上传的文字和照片仍归原权利人所有；请确认自己有权使用相关内容，并注意隐藏私人信息</li>
+        <li data-i18n="copyrightRescue">使用本工具生成的卡片可用于非商业动物救助和公益转发，但不得单独出售模板或内置素材</li>
+      </ul>
+      <p class="copyright-note" data-i18n="copyrightContact">本说明用于明确使用边界，不替代正式法律意见</p>
+    </div>
+  </dialog>
+
+  <script src="js/app-01.js?v=6" defer></script>
+  <script src="js/app-02.js?v=6" defer></script>
+  <script src="js/app-03.js?v=6" defer></script>
+  <script src="js/app-04.js?v=6" defer></script>
+  <script src="js/app-05.js?v=6" defer></script>
+  <script src="js/app-06.js?v=6" defer></script>
+  <script src="js/app-08.js?v=6" defer></script>
+  <script src="js/app-09.js?v=6" defer></script>
+  <script src="js/app-10.js?v=6" defer></script>
+  <script src="js/app-07.js?v=6" defer></script>
 </body>
 </html>
 

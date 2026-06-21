@@ -63,7 +63,7 @@ function drawCard(canvas, data, copy, templateId, thumbnail = false) {
     warm:drawWarm,notice:drawNotice,green:drawGreen,alert:drawAlert,quote:drawQuote,
     'voice-photo':drawVoicePhoto,'paper-pets':drawPaperPets,'urgent-photo':drawUrgentPhoto,
     'starlight-photo':drawStarlightPhoto,'polaroid-photo':drawPolaroidPhoto,'editorial-photo':drawEditorialPhoto,
-    'floral-kindness':drawFloralKindness,'warm-appeal':drawWarmAppeal,'scrapbook-help':drawScrapbookHelp
+    'floral-kindness':drawFloralKindness,'warm-appeal':drawWarmAppeal,'moonlight-shelter':drawMoonlightShelter,'scrapbook-help':drawScrapbookHelp
   };
   (drawers[templateId] || drawWarm)(ctx,w,h,data,copy,u,thumbnail);ctx.restore();
 }

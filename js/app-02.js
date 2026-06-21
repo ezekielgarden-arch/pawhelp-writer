@@ -43,6 +43,7 @@ const templates = [
   { id: "editorial-photo", en: "Editorial Rescue", zh: "杂志救助", photo: "assets/photos/editorial-dog.jpg", focusX: .58 },
   { id: "floral-kindness", en: "Floral Kindness", zh: "花语善意" },
   { id: "warm-appeal", en: "Warm Appeal", zh: "暖橘呼吁" },
+  { id: "moonlight-shelter", en: "Moonlight Shelter", zh: "月光守护" },
   { id: "scrapbook-help", en: "Scrapbook Help", zh: "手账求助" }
 ];
 
