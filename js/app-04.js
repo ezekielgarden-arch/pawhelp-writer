@@ -225,7 +225,7 @@ function init() {
   const starter = { animal: 'cat', age: 'adult', condition: 'injured', helpType: 'foster', location: '', contact: '', tone: 'gentle', platform: 'xiaohongshu', length: 'medium', details: '' };
   applyData(starter); state.lastData = starter; state.lastCopy = buildCopy(starter);
   bindEvents(); preloadTemplateImages(); renderLanguage(); renderPost(); drawMainCard(); renderHistory(); configureEnvironment();
-  if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./sw.js?v=8').catch(() => {});
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./sw.js?v=9').catch(() => {});
 }
 
 document.addEventListener('DOMContentLoaded', init);
